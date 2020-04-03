@@ -9,6 +9,8 @@ const FileSync = require('lowdb/adapters/FileSync')
 const adapter = new FileSync('db.json')
 const db = low(adapter)
 
+const shortid = require('shortid');
+
 // Set some defaults (required if your JSON file is empty)
 db.defaults({ users: []}).write();
 
@@ -23,6 +25,7 @@ app.get('/', (req, res)=>{
         name: 'AAA'
     });
 });
+
 
 app.get('/users', (req, res)=>{
     res.render('users/index', {
@@ -45,8 +48,17 @@ app.get('/users/create', (req, res) => {
 });
 
 app.post('/users/create', (req, res) => {
+    req.body.id = shortid.generate();
     db.get('users').push(req.body).write();
     res.redirect('/users');
+});
+
+app.get('/users/:id', (req, res) => {
+    let id = req.params.id;
+    let user = db.get('users').find({ id: id }).value();
+    res.render('users/view', {
+        user: user
+    });
 });
 
 app.listen(port, ()=>{
