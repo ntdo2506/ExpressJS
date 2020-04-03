@@ -3,6 +3,9 @@ const app = express();
 
 const port = 3000;
 
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
 app.set('views', './views');
 app.set('view engine', 'pug');
 
@@ -29,6 +32,15 @@ app.get('/users/search', (req, res) => {
     res.render('users/index', {
         users: matchedUser
     });
+});
+
+app.get('/users/create', (req, res) => {
+    res.render('users/create')
+});
+
+app.post('/users/create', (req, res) => {
+    users.push(req.body);
+    res.redirect('/users');
 });
 
 app.listen(port, ()=>{
