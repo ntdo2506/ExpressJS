@@ -1,6 +1,9 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
+
 const useRouter = require('./routes/user.route');
-const cookieParser = require('cookie-parser')
+const authRoute = require('./routes/auth.route');
+const authMiddleware = require('./middlewares/auth.middlewares');
 
 const app = express();
 const port = 3000;
@@ -20,7 +23,8 @@ app.get('/', (req, res)=>{
     });
 });
 
-app.use('/users', useRouter);
+app.use('/auth', authRoute);
+app.use('/users', authMiddleware.requireAuth, useRouter);
 
 app.listen(port, ()=>{
     console.log(`Server is ${port}`);

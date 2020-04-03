@@ -7,7 +7,7 @@ module.exports.index = (req, res)=>{
     });
 };
 
-module.exports.search = (req, res) => {
+module.exports.search = (req, res)=>{
     let q = req.query.q;
     let matchedUsers = db.get('users').value().filter(user => {
         return user.name.toLowerCase().indexOf(q.toLowerCase()) !== -1;
